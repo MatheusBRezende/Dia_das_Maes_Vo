@@ -1,0 +1,532 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #ff6b6b;
+    --secondary-color: #ff8e8e;
+    --text-color: #333;
+    --light-text: #666;
+    --background: #fff5f5;
+    --white: #ffffff;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--background);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+    touch-action: manipulation;
+}
+
+/* ========= ENTRANCE SECTION ========= */
+#entrance {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--background);
+    z-index: 100;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    overflow: hidden;
+}
+
+#entrance.hidden {
+    opacity: 0;
+    transform: translateY(-100%);
+    pointer-events: none;
+}
+
+/* Floating Hearts */
+.floating-hearts {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.heart {
+    position: absolute;
+    color: var(--primary-color);
+    opacity: 0.6;
+    animation: float 15s infinite linear;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 0.9;
+    }
+    100% {
+        transform: translateY(-120vh) rotate(360deg) scale(1.2);
+        opacity: 0;
+    }
+}
+
+@keyframes floatReverse {
+    0% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 0.6;
+    }
+    50% {
+        transform: rotate(-180deg);
+    }
+    100% {
+        transform: translateY(-120vh) rotate(-360deg) scale(1.2);
+        opacity: 0;
+    }
+}
+
+.heart svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Main Photo Container */
+.main-photo-container {
+    position: relative;
+    width: 70%;
+    max-width: 300px;
+    margin: 1rem 0;
+    z-index: 2;
+}
+
+.main-photo {
+    width: 100%;
+    aspect-ratio: 3/4;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+    border: 3px solid var(--white);
+    transform: scale(0.95);
+    opacity: 0;
+    animation: photoAppear 1.5s forwards 0.5s;
+    position: relative;
+}
+
+.main-photo::before {
+    content: "";
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    right: -15px;
+    bottom: -15px;
+    border: 2px dashed var(--primary-color);
+    border-radius: 25px;
+    opacity: 0.5;
+    z-index: -1;
+    animation: rotateDecoration 20s linear infinite;
+}
+
+.main-photo::after {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background: radial-gradient(circle, transparent 60%, rgba(255, 107, 107, 0.1) 100%);
+    border-radius: 30px;
+    z-index: -2;
+}
+
+@keyframes rotateDecoration {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.main-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+}
+
+@keyframes photoAppear {
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Entrance Message */
+.entrance-message {
+    text-align: center;
+    margin: 1.5rem 0;
+    transform: translateY(20px);
+    opacity: 0;
+    animation: messageAppear 1s forwards 1.5s;
+    width: 100%;
+    position: relative;
+}
+
+@keyframes messageAppear {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.entrance-message h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(2rem, 8vw, 2.5rem);
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.entrance-message p {
+    font-size: clamp(0.9rem, 4vw, 1rem);
+    color: var(--light-text);
+}
+
+/* Continue Button - CORREÇÃO PRINCIPAL */
+.continue-button {
+    position: absolute;
+    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 1s ease;
+    padding: 0.8rem 1.8rem;
+    border-radius: 30px;
+    background-color: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow);
+    min-width: 200px;
+    text-align: center;
+    z-index: 10;
+    border: none;
+    outline: none;
+}
+
+.continue-button.visible {
+    opacity: 1;
+    animation: bounce 2s infinite 3s;
+}
+
+.continue-button span {
+    margin-bottom: 0.3rem;
+    font-size: clamp(1rem, 4vw, 1.2rem);
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.continue-button svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--primary-color);
+    transition: transform 0.3s ease;
+}
+
+.continue-button:hover {
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.continue-button:hover svg {
+    transform: translateY(3px);
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    40% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+    60% {
+        transform: translateX(-50%) translateY(-5px);
+    }
+}
+
+/* Music Control */
+.music-control {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 0.8rem 1.2rem;
+    border-radius: 30px;
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-color);
+    cursor: pointer;
+    z-index: 10;
+    border: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    box-shadow: var(--shadow);
+}
+
+.music-control i {
+    font-size: 1.2rem;
+}
+
+/* Decorative Flowers */
+.decorative-flower {
+    position: absolute;
+    color: var(--primary-color);
+    opacity: 0.7;
+    z-index: -1;
+    animation-timing-function: ease-in-out;
+}
+
+.flower-1 {
+    top: 15%;
+    left: 8%;
+    font-size: 1.8rem;
+    animation: float 8s infinite;
+}
+
+.flower-2 {
+    bottom: 25%;
+    right: 10%;
+    font-size: 2.2rem;
+    animation: float 10s infinite reverse;
+}
+
+.flower-3 {
+    top: 30%;
+    right: 8%;
+    font-size: 1.5rem;
+    animation: float 7s infinite;
+}
+
+/* ========= PHOTO MURAL SECTION ========= */
+#mural {
+    padding: 3rem 1rem;
+    transition: opacity 0.8s ease;
+    min-height: 100vh;
+}
+
+#mural.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.back-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 45px;
+    height: 45px;
+    background-color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--shadow);
+    z-index: 10;
+    cursor: pointer;
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    border: none;
+    outline: none;
+}
+
+.mural-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-top: 1rem;
+}
+
+.mural-header h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.8rem, 8vw, 2.4rem);
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.mural-header p {
+    font-size: clamp(0.9rem, 4vw, 1.1rem);
+    color: var(--light-text);
+}
+
+.photo-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+    margin-bottom: 3rem;
+    padding: 0 0.8rem;
+}
+
+@media (min-width: 480px) {
+    .photo-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 768px) {
+    .photo-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+}
+
+.photo-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: scale(0.95);
+    opacity: 0;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.photo-item.visible {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.photo-container {
+    width: 100%;
+    aspect-ratio: 3/4; 
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    background-color: var(--white);
+    padding: 0.6rem;
+    margin-bottom: 0.8rem;
+    position: relative;
+}
+
+.photo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center; 
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.photo-container.horizontal.primeira {
+    aspect-ratio: 3/4; 
+}
+
+.photo-container.horizontal.segunda{
+    aspect-ratio: 20/16; 
+}
+
+.photo-container.horizontal{
+    aspect-ratio: 16/9; 
+}
+
+.photo-container.vertical {
+    aspect-ratio: 3/4; 
+}
+
+.photo-container.horizontal img {
+    object-position: center top; 
+}
+
+.photo-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.photo-container.loaded::before {
+    display: none;
+}
+
+
+.photo-item:hover .photo-container img {
+    transform: scale(1.05);
+}
+
+.photo-caption {
+    font-size: clamp(0.85rem, 3.5vw, 1rem);
+    color: var(--light-text);
+    text-align: center;
+    margin-top: 0.6rem;
+    font-weight: 500;
+}
+
+.message-container {
+    margin: 3.5rem 0;
+    display: flex;
+    justify-content: center;
+    padding: 0 1.2rem;
+}
+
+.message-card {
+    background-color: var(--white);
+    padding: clamp(1.8rem, 6vw, 2.5rem);
+    border-radius: 18px;
+    box-shadow: var(--shadow);
+    max-width: 550px;
+    width: 100%;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.message-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.message-card h3 {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.8rem, 7vw, 2.3rem);
+    color: var(--primary-color);
+    margin-bottom: 1.2rem;
+}
+
+.message-card p {
+    margin-bottom: 1.8rem;
+    line-height: 1.8;
+    font-size: clamp(1rem, 4.5vw, 1.1rem);
+}
+
+.signature {
+    font-family: 'Dancing Script', cursive;
+    font-size: clamp(1.3rem, 6vw, 1.6rem);
+    color: var(--primary-color);
+    margin-bottom: 0.5rem !important;
+}
+
+/* ========= UTILITIES ========= */
+/* Improved touch targets for mobile */
+button, .continue-button, .back-button, .music-control {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Prevent zoom on input */
+@media screen and (max-width: 767px) {
+    input, select, textarea {
+        font-size: 16px;
+    }
+}
